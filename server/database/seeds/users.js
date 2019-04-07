@@ -1,12 +1,33 @@
-exports.seed = function(knex, Promise) {
+exports.seed = function (knex, Promise) {
   // Deletes ALL existing entries
-  return knex('users').del()
+  return knex('kanban').del()
     .then(function () {
       // Inserts seed entries
-      return knex('users').insert([
-        { username: 'ed' },
-        { username: 'raymond' },
-        { username: 'jason' }
+      return knex('kanban').insert([
+        {
+          title: 'what is a kanban',
+          message: 'help',
+          author: 'help',
+          status: 'queue'
+        },
+        {
+          title: 'what is a kanban',
+          message: 'help',
+          author: 'help',
+          status: 'queue'
+        },
+        {
+          title: 'i still dont know',
+          message: 'apparently its good for productivity',
+          author: 'please absolve me of responsibility',
+          status: 'pending'
+        },
+        {
+          title: 'a title',
+          message: 'a message',
+          author: 'help',
+          status: 'done'
+        }
       ]);
     });
 };

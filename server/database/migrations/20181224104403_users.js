@@ -1,10 +1,19 @@
-exports.up = function(knex, Promise) {
-  return knex.schema.createTable('users', function(table){
+exports.up = function (knex, Promise) {
+  return knex.schema.createTable('kanban', function (table) {
+    // table.increments('id');
+    // table.string('username');
     table.increments('id');
-    table.string('username');
+    table.string('title');
+    table.string('author');
+    table.string('message');
+    table.string('status');
+  }).createTable('users', function (table) {
+    table.string('author');
+    table.string('message');
+    table.string('status');
   });
 };
 
-exports.down = function(knex, Promise) {
-  return knex.schema.dropTable('users');
+exports.down = function (knex, Promise) {
+  return knex.schema.dropTable('kanban');
 };

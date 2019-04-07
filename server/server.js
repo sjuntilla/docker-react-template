@@ -1,7 +1,9 @@
 const express = require('express');
+const bp = require('body-parser');
 const bodyParser = require('body-parser');
-const userRoutes = require('./routes/users');
+const userRoutes = require('./routes/api');
 const decorator = require('./database/decorator');
+
 
 // data vars
 const PORT = process.env.PORT;
@@ -15,16 +17,25 @@ if (!PORT || !SESSION_SECRET || !REDIS_HOSTNAME) { return process.exit(1); }
 
 // setup server middleware
 const app = express();
-app.use(bodyParser.json({ extended: true }));
+app.use(
+  bodyParser.urlencoded({
+    extended: true
+  })
+);
+app.use(bodyParser.json());
 
 // decorate request with database
 app.use(decorator);
 
+//serve up routes
+express.static('./routes');
+
 // routes
+app.get('/', (req, res) => {
+  res.send('SMOEK TEST')
+})
 app.use('/api', userRoutes);
-app.get('/api/smoke', (req, res) => {
-  res.json({ smoke: 'test' });
-});
+
 
 // start server
 app.listen(PORT, () => {

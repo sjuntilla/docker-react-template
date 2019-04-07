@@ -1,106 +1,95 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
+import React, {
+  Component
+} from 'react';
 import './App.css';
 
-class App extends Component {
+class kanbanBoard extends Component {
   constructor(props) {
     super(props);
-
-    // properties
     this.state = {
-      smoke: '',
-      users: [],
-      newUser: { username: '' }
+      smoke: 'test',
+      cards: [],
+      newCard: { title: '', author: '', message: '', status: '' },
+      title: '',
+      author: '',
+      message: '',
+      status: ''
     };
 
-    // bindings
-    this.smokeTest = this.smokeTest.bind(this);
-    this.getUsers = this.getUsers.bind(this);
-    this.updateUser = this.updateUser.bind(this);
-    this.createUser = this.createUser.bind(this);
+    this.getCards = this.getCards.bind(this);
+    this.updateCard = this.updateCard.bind(this);
+    this.newCard = this.newCard.bind(this);
 
-    // init
-    this.smokeTest();
-    this.getUsers();
+    this.getCards();
   }
 
-  smokeTest() {
-    fetch('/api/smoke')
-      .then((res) => {
-        return res.json();
-      })
-      .then((body) => {
-        this.setState({ smoke: body.smoke });
-      });
-  }
+  getCards() {
+    fetch('/api/kanban').then((res) => { return res.json(); })
+      .then((body) => { this.setState({ cards: body }); });
+  };
 
-  getUsers() {
-    fetch('/api/users')
-      .then((res) => { return res.json(); })
-      .then((body) => {
-        this.setState({ users: body });
-      });
-  }
+  updateCard(e) {
+    console.log(e.target.name)
+    this.setState({ [e.target.name]: e.target.value })
+  };
 
-  updateUser(e) {
-    this.setState({ newUser: { username: e.target.value }});
-  }
-
-  createUser() {
-    const newUser = this.state.newUser;
+  newCard() {
+    const card = this.state.newCard;
     const headers = { 'Content-Type': 'application/json' };
-    fetch('/api/users', { method: 'POST', body: JSON.stringify(newUser), headers })
+    fetch('/api/kanban', { method: 'POST', body: JSON.stringify(card), headers })
       .then((res) => {
-        return fetch('/api/users')
+        return fetch('/api/kanban')
           .then((res) => { return res.json(); })
-          .then((body) => { this.setState({ users: body }); });
-      });
+          .then((body) => { this.setState({ cards: body }) })
+      })
   }
 
   render() {
+    const { cards } = this.state;
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-
-          <div>
-            { this.state.smoke ? this.state.smoke : '' }
-          </div>
-
-          <div>
-            {
-              this.state.users.map((user) => {
-                return (
-                  <div>
-                    { user.username }
-                  </div>
-                );
-              })
+      <div>
+        <h1>Add New Task</h1>
+        <form>
+          <input type="text" placeholder="title" name="title" value={this.state.newCard.title} onChange={this.updateCard} />
+          <input type="text" placeholder="message" name="message" value={this.state.newCard.message} onChange={this.updateCard} />
+          <input type="text" placeholder="author" name="author" value={this.state.newCard.author} onChange={this.updateCard} />
+          <input type="text" placeholder="status" name="status" value={this.state.newCard.status} onChange={this.updateCard} />
+          <button onClick={this.newCard}>Add Task</button>
+        </form>
+        <div className="app">
+          <div className="column"><h1>Queue</h1>{cards.filter(card => {
+            if (card.status === 'queue') {
+              return card;
             }
-          </div>
+          }).map(card => (<Cards className={card.status} key={card.id.toString()} title={card.title} message={card.message} author={card.author} status={card.status} />))
+          }</div>
 
-          <div>
-            <label> Create new User: </label>
-            <input type="text" value={this.state.newUser.username} onChange={this.updateUser}/>
-            <button onClick={this.createUser}>Create User</button>
-          </div>
+          <div className="column"><h1>Pending</h1>{cards.filter(card => {
+            if (card.status === 'pending') {
+              return card;
+            }
+          }).map(card => (<Cards key={card.id.toString()} title={card.title} message={card.message} author={card.author} status={card.status} />))}</div>
 
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
+          <div className="column"> <h1>Done</h1>{cards.filter(card => {
+            if (card.status === 'done') {
+              return card;
+            }
+          }).map(card => (<Cards key={card.id.toString()} title={card.title} message={card.message} author={card.author} status={card.status} />))}</div>
+        </div>
+      </div>)
 
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
+
   }
+};
+function Cards(props) {
+  return (
+    <div className={props.status}>
+      <b>{props.title}</b> <br />
+      {props.message} <br />
+      <p className="author">{props.author}</p>
+      <p className="links"><a href="">edit</a> &middot; <a href="">delete</a></p>
+    </div>
+  );
 }
 
-export default App;
+export default kanbanBoard;

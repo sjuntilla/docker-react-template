@@ -12,7 +12,7 @@
     "pg": "^7.7.1",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
-    "react-scripts": "2.1.2"
+    "react-scripts": "^2.1.8"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -25,7 +25,9 @@
   },
   "proxy": "http://localhost:8080",
   "nodemonConfig": {
-    "watch": ["server"]
+    "watch": [
+      "server"
+    ]
   },
   "browserslist": [
     ">0.2%",
