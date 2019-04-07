@@ -9,10 +9,9 @@ class kanbanBoard extends Component {
     this.state = {
       smoke: 'test',
       cards: [],
-      newCard: { title: '', author: '', message: '', status: '' },
       title: '',
-      author: '',
       message: '',
+      author: '',
       status: ''
     };
 
@@ -29,12 +28,16 @@ class kanbanBoard extends Component {
   };
 
   updateCard(e) {
-    console.log(e.target.name)
     this.setState({ [e.target.name]: e.target.value })
   };
 
   newCard() {
-    const card = this.state.newCard;
+    const card = {
+      title: this.state.title,
+      message: this.state.message,
+      author: this.state.author,
+      status: this.state.status
+    }
     const headers = { 'Content-Type': 'application/json' };
     fetch('/api/kanban', { method: 'POST', body: JSON.stringify(card), headers })
       .then((res) => {
@@ -49,12 +52,12 @@ class kanbanBoard extends Component {
     return (
       <div>
         <h1>Add New Task</h1>
-        <form>
-          <input type="text" placeholder="title" name="title" value={this.state.newCard.title} onChange={this.updateCard} />
-          <input type="text" placeholder="message" name="message" value={this.state.newCard.message} onChange={this.updateCard} />
-          <input type="text" placeholder="author" name="author" value={this.state.newCard.author} onChange={this.updateCard} />
-          <input type="text" placeholder="status" name="status" value={this.state.newCard.status} onChange={this.updateCard} />
-          <button onClick={this.newCard}>Add Task</button>
+        <form id="form" onSubmit={this.newCard}>
+          <input type="text" placeholder="title" name="title" value={this.state.title} onChange={this.updateCard} />
+          <input type="text" placeholder="message" name="message" value={this.state.message} onChange={this.updateCard} />
+          <input type="text" placeholder="author" name="author" value={this.state.author} onChange={this.updateCard} />
+          <input type="text" placeholder="status" name="status" value={this.state.status} onChange={this.updateCard} />
+          <input type="submit" label="Add Task" />
         </form>
         <div className="app">
           <div className="column"><h1>Queue</h1>{cards.filter(card => {
