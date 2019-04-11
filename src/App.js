@@ -7,12 +7,13 @@ class kanbanBoard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      smoke: 'test',
+      id: 0,
       cards: [],
       title: '',
       message: '',
       author: '',
-      status: ''
+      status: '',
+      delete: ''
     };
 
     this.getCards = this.getCards.bind(this);
@@ -45,7 +46,25 @@ class kanbanBoard extends Component {
           .then((res) => { return res.json(); })
           .then((body) => { this.setState({ cards: body }) })
       })
-  }
+  };
+
+  delete = id => {
+    const headers = { "Content-Type": "application/json" };
+    let data = { flag: id };
+    fetch("/api/kanban/delete", {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers
+    }).then(res => {
+      return fetch("/")
+        // .then(res => {
+        //   return res.json();
+        // })
+        .then(body => {
+          this.setState({ cards: body });
+        });
+    });
+  };
 
   render() {
     const { cards } = this.state;
@@ -56,30 +75,36 @@ class kanbanBoard extends Component {
           <input type="text" placeholder="title" name="title" value={this.state.title} onChange={this.updateCard} />
           <input type="text" placeholder="message" name="message" value={this.state.message} onChange={this.updateCard} />
           <input type="text" placeholder="author" name="author" value={this.state.author} onChange={this.updateCard} />
-          <input type="text" placeholder="status" name="status" value={this.state.status} onChange={this.updateCard} />
+
+          <select name="status" className="status" onChange={this.updateCard}>
+            <option value="null">Status...</option>
+            <option value="queue">Queue</option>
+            <option value="pending">Pending</option>
+            <option value="done">Done</option>
+          </select>
           <input type="submit" label="Add Task" />
-        </form>
+        </form >
         <div className="app">
           <div className="column"><h1>Queue</h1>{cards.filter(card => {
             if (card.status === 'queue') {
               return card;
             }
-          }).map(card => (<Cards className={card.status} key={card.id.toString()} title={card.title} message={card.message} author={card.author} status={card.status} />))
+          }).map(card => (<Cards className={card.status} id={card.id.toString()} title={card.title} message={card.message} author={card.author} status={card.status} delete={this.delete} />))
           }</div>
 
           <div className="column"><h1>Pending</h1>{cards.filter(card => {
             if (card.status === 'pending') {
               return card;
             }
-          }).map(card => (<Cards key={card.id.toString()} title={card.title} message={card.message} author={card.author} status={card.status} />))}</div>
+          }).map(card => (<Cards id={card.id.toString()} title={card.title} message={card.message} author={card.author} status={card.status} delete={this.delete} />))}</div>
 
           <div className="column"> <h1>Done</h1>{cards.filter(card => {
             if (card.status === 'done') {
               return card;
             }
-          }).map(card => (<Cards key={card.id.toString()} title={card.title} message={card.message} author={card.author} status={card.status} />))}</div>
+          }).map(card => (<Cards id={card.id.toString()} title={card.title} message={card.message} author={card.author} status={card.status} delete={this.delete} />))}</div>
         </div>
-      </div>)
+      </div >)
 
 
   }
@@ -90,8 +115,8 @@ function Cards(props) {
       <b>{props.title}</b> <br />
       {props.message} <br />
       <p className="author">{props.author}</p>
-      <p className="links"><a href="">edit</a> &middot; <a href="">delete</a></p>
-    </div>
+      <p className="links"><button>edit</button> &middot; <button onClick={() => { console.log('OH GOOOOOOOOOD', props.id); props.delete(props.id) }}>delete</button></p>
+    </div >
   );
 }
 

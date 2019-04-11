@@ -32,7 +32,7 @@ express.static('./routes');
 
 // routes
 app.get('/', (req, res) => {
-  res.send('SMOEK TEST')
+  res.redirect('/api/kanban')
 })
 app.use('/api', userRoutes);
 

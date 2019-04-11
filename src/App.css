@@ -27,6 +27,9 @@ a:hover {
 }
 
 div {
+  display:flex;
+  flex-flow: column nowrap;
+  justify-content: space-around;
   padding: 15px;
 }
 
@@ -96,9 +99,38 @@ h1 {
   letter-spacing: 2px;
   font-weight: bold;
 }
+input {
+  background-color: #cccccc;
+  width: 200px;
+  font-family: inherit;
+  font-size: 16px;
+  border-radius: 0.4rem;
+  margin: 4px;
+  padding: 2px;
+  border: none;
+  border-radius: 0.4rem;
+  transition: box-shadow var(--transitionDuration);
+}
 
+input:focus {
+  outline: none;
+  box-shadow: 0.2rem 0.2rem 1.6rem;
+}
+
+input::placeholder {
+  color: #464444;
+}
 .links {
   margin-top: 0px;
-  text-align: left;
+  text-align: right;
   font-size: 12px;
+}
+
+.status {
+  position: relative;
+  font-family:'Maven Pro', sans-serif;
+  font-size: 16px;
+  text-transform: uppercase;
+  width: 200px;
+  background-color: #cccccc;
 }

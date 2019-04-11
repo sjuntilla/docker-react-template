@@ -23,8 +23,16 @@ router.route('/kanban')
         res.sendStatus(500);
       });
   })
-// .delete((req,res) => {
-//   return new req.database.User().where()
-// });
+
+router.route('/kanban/delete')
+  .post((req, res) => {
+    let id = req.body.flag;
+    return new req.database.User().where({ id }).destroy().then(data => {
+      return res.json({ success: true });
+    }).catch((err) => {
+      console.log(err);
+      res.sendStatus(500)
+    })
+  });
 
 module.exports = router;
