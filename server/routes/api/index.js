@@ -24,11 +24,10 @@ router.route('/kanban')
       });
   })
 
-router.route('/kanban/delete')
+router.route('/kanban/delete/:id')
   .post((req, res) => {
-    let id = req.body.flag;
-    return new req.database.User().where({ id }).destroy().then(data => {
-      return res.json({ success: true });
+    return new req.database.User().where("id", req.params.id).destroy().then(data => {
+      return res.json({ success: true }).redirect('/');
     }).catch((err) => {
       console.log(err);
       res.sendStatus(500)
