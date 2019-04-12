@@ -112,7 +112,7 @@ function Cards(props) {
       <b>{props.title}</b> <br />
       {props.message} <br />
       <p className="author">{props.author}</p>
-      <p className="links"><button>edit</button> &middot;
+      <p className="links"><button>edit</button>
         <button onClick={() => { console.log('OH GOOOOOOOOOD', props.id); props.delete(props.id) }}>delete</button></p>
     </div >
   );

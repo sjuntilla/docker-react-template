@@ -24,16 +24,6 @@ router.route('/kanban')
       });
   })
 
-router.route('/kanban/delete/:id')
-  .post((req, res) => {
-    return new req.database.User().where("id", req.params.id).destroy().then(data => {
-      return res.json({ success: true }).redirect('/');
-    }).catch((err) => {
-      console.log(err);
-      res.sendStatus(500)
-    })
-  });
-
 router.route('/kanban/:id')
   .post((req, res) => {
     return new req.database.User().where("id", req.params.id).fetch().then(card => new req.database.User({ id: req.params.id }).save({
@@ -43,6 +33,14 @@ router.route('/kanban/:id')
       status: req.body.status
     }, { patch: true })
       .then(() => { return res.json({ success: true }) }))
+  })
+  .delete((req, res) => {
+    return new req.database.User().where("id", req.params.id).destroy().then(data => {
+      return res.json({ success: true }).redirect('/');
+    }).catch((err) => {
+      console.log(err);
+      res.sendStatus(500)
+    })
   })
 
 module.exports = router;
