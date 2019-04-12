@@ -34,4 +34,15 @@ router.route('/kanban/delete/:id')
     })
   });
 
+router.route('/kanban/:id')
+  .post((req, res) => {
+    return new req.database.User().where("id", req.params.id).fetch().then(card => new req.database.User({ id: req.params.id }).save({
+      title: req.body.title,
+      author: req.body.author,
+      message: req.body.message,
+      status: req.body.status
+    }, { patch: true })
+      .then(() => { return res.json({ success: true }) }))
+  })
+
 module.exports = router;
