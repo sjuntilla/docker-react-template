@@ -43,4 +43,15 @@ router.route('/kanban/:id')
     })
   })
 
+router.route('/kanban/delete/:id')
+  .post((req, res) => {
+    return new req.database.User().where("id", req.params.id).destroy().then(data => {
+      console.log('Task deleted.', data)
+      return res.redirect('/');
+    }).catch((err) => {
+      console.log(err);
+      res.sendStatus(500)
+    })
+  })
+
 module.exports = router;

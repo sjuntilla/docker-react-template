@@ -48,20 +48,23 @@ class kanbanBoard extends Component {
       })
   };
 
-  delete = id => {
-    const headers = { "Content-Type": "application/json" };
-    let data = { flag: id };
-    fetch("/api/kanban/delete", {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers
-    }).then(card => {
-      return fetch("/")
-        .then(body => {
-          this.setState({ cards: body });
-        });
-    });
-  };
+  // delete = id => {
+  //   const cards = this.state.cards.filter(card => id !== card.id);
+  //   console.log(cards)
+  //   this.setState({ cards });
+  // const headers = { "Content-Type": "application/json" };
+  // let data = { flag: id };
+  // fetch("/api/kanban/:id", {
+  //   method: "DELETE",
+  //   body: JSON.stringify(data),
+  //   headers
+  // }).then(card => {
+  //   return fetch("/")
+  //     .then(body => {
+  //       this.setState({ cards: body });
+  //     });
+  // });
+
 
   render() {
     const { cards } = this.state;
@@ -86,35 +89,35 @@ class kanbanBoard extends Component {
             if (card.status === 'queue') {
               return card;
             }
-          }).map(card => (<Cards className={card.status} id={card.id.toString()} title={card.title} message={card.message} author={card.author} status={card.status} delete={this.delete} />))
+          }).map(card => (<Cards className={card.status} key={card.id} id={card.id.toString()} title={card.title} message={card.message} author={card.author} status={card.status} />))
           }</div>
 
           <div className="column"><h1>Pending</h1>{cards.filter(card => {
             if (card.status === 'pending') {
               return card;
             }
-          }).map(card => (<Cards id={card.id.toString()} title={card.title} message={card.message} author={card.author} status={card.status} delete={this.delete} />))}</div>
+          }).map(card => (<Cards key={card.id} id={card.id.toString()} title={card.title} message={card.message} author={card.author} status={card.status} />))}</div>
 
           <div className="column"> <h1>Done</h1>{cards.filter(card => {
             if (card.status === 'done') {
               return card;
             }
-          }).map(card => (<Cards id={card.id.toString()} title={card.title} message={card.message} author={card.author} status={card.status} delete={this.delete} />))}</div>
+          }).map(card => (<Cards key={card.id} id={card.id.toString()} title={card.title} message={card.message} author={card.author} status={card.status} />))}</div>
         </div>
       </div >)
-
-
   }
-};
+
+}
+
 function Cards(props) {
   return (
     <div className={props.status}>
       <b>{props.title}</b> <br />
       {props.message} <br />
       <p className="author">{props.author}</p>
-      <p className="links"><button>edit</button>
-        <button onClick={() => { console.log('OH GOOOOOOOOOD', props.id); props.delete(props.id) }}>delete</button></p>
-    </div >
+      <div className="links"><button>edit</button>
+        <form action={`api/kanban/delete/${props.id}`} method='POST'><button>Delete</button></form>
+      </div></div>
   );
 }
 
