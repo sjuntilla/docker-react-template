@@ -2,6 +2,9 @@ import React, {
   Component
 } from 'react';
 import './App.css';
+// import Button from '@material-ui/core/Button';
+// import nav from './components/navbar.js';
+// import Card from './components/card'
 
 class kanbanBoard extends Component {
   constructor(props) {
@@ -48,28 +51,11 @@ class kanbanBoard extends Component {
       })
   };
 
-  // delete = id => {
-  //   const cards = this.state.cards.filter(card => id !== card.id);
-  //   console.log(cards)
-  //   this.setState({ cards });
-  // const headers = { "Content-Type": "application/json" };
-  // let data = { flag: id };
-  // fetch("/api/kanban/:id", {
-  //   method: "DELETE",
-  //   body: JSON.stringify(data),
-  //   headers
-  // }).then(card => {
-  //   return fetch("/")
-  //     .then(body => {
-  //       this.setState({ cards: body });
-  //     });
-  // });
-
-
   render() {
     const { cards } = this.state;
     return (
       <div>
+        <nav />
         <h1>Add New Task</h1>
         <form id="form" onSubmit={this.newCard}>
           <input type="text" placeholder="title" name="title" value={this.state.title} onChange={this.updateCard} />
@@ -105,6 +91,8 @@ class kanbanBoard extends Component {
           }).map(card => (<Cards key={card.id} id={card.id.toString()} title={card.title} message={card.message} author={card.author} status={card.status} />))}</div>
         </div>
       </div >)
+
+
   }
 
 }
@@ -115,8 +103,8 @@ function Cards(props) {
       <b>{props.title}</b> <br />
       {props.message} <br />
       <p className="author">{props.author}</p>
-      <div className="links"><button>edit</button>
-        <form action={`api/kanban/delete/${props.id}`} method='POST'><button>Delete</button></form>
+      <div className="links">
+        <form action={`api/kanban/delete/${props.id}`} method='POST'><button variant="contained" color="primary">Delete</button></form>
       </div></div>
   );
 }

@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "^3.9.3",
     "body-parser": "^1.18.3",
     "bookshelf": "^0.14.2",
     "dotenv": "^6.2.0",
@@ -13,7 +14,8 @@
     "react": "^16.7.0",
     "react-beautiful-dnd": "^11.0.0-beta.3",
     "react-dom": "^16.7.0",
-    "react-scripts": "^2.1.8"
+    "react-scripts": "^2.1.8",
+    "typeface-roboto": "0.0.54"
   },
   "scripts": {
     "start": "react-scripts start",
