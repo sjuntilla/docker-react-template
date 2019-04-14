@@ -3,13 +3,14 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 
-const nav = () => {
+const navBar = () => {
     return (<div>
         <AppBar position="static">
             <Toolbar>
-                <Typography variant="title" color="inherit">
-                    a kanban board.</Typography></Toolbar></AppBar>
+                <Typography variant="title" color="inherit">a kanban board.</Typography>
+            </Toolbar>
+        </AppBar>
     </div>)
 }
 
-export default nav;
+export default navBar;
